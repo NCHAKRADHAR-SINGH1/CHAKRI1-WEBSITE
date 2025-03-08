@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Gnan-Akka</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-image: url('https://images.pexels.com/photos/1303081/pexels-photo-1303081.jpeg?cs=srgb&dl=pexels-george-dolgikh-551816-1303081.jpg&fm=jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: white;
+        }
+
+        .input-container {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px;
+            display: inline-block;
+            border-radius: 10px;
+        }
+
+        input {
+            background: rgba(255, 255, 255, 0.9);
+            color: black;
+            padding: 8px;
+            margin: 5px;
+            border-radius: 5px;
+            border: 1px solid black;
+        }
+
+        button {
+            background-color: gold;
+            color: black;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: orange;
+        }
+
+        #message {
+            font-size: 28px;
+            color: gold;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px black;
+            margin-top: 20px;
+            animation: glow 1.5s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px gold, 0 0 20px yellow;
+            }
+            to {
+                text-shadow: 0 0 20px orange, 0 0 30px red;
+            }
+        }
+
+        #wishMessage {
+            font-size: 20px;
+            font-weight: bold;
+            color: black;
+            margin-top: 10px;
+            text-shadow: 2px 2px 8px black;
+            line-height: 1.5;
+        }
+
+        #birthdayParagraph {
+            font-size: 18px;
+            color: white;
+            font-style: italic;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            display: none;
+        }
+
+        #cakeContainer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        #cake {
+            display: none;
+            width: 300px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .fireworks {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            display: none;
+            z-index: 999;
+        }
+
+        #playAudioBtn {
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="input-container">
+        <p><strong> NAME : </strong> <input type="text" id="voterNameInput"></p>
+        <p><strong> AGE : </strong> <input type="number" id="voterAgeInput"></p>
+    </div>
+
+    <h2>Enter Your Birthday Date</h2>
+    <input type="date" id="birthdayInput">
+    <button onclick="checkBirthday()">Check</button>
+
+    <p id="message"></p>
+    <p id="wishMessage"></p>
+    <p id="birthdayParagraph"></p>
+
+    <div id="cakeContainer">
+        <img id="cake" src="https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8MjB0aCUyMGJpcnRoZGF5JTIwY2FrZXxlbnwwfHwwfHx8MA%3D%3D" alt="Birthday Cake">
+    </div>
+
+    <audio id="birthdaySong">
+        <source src="https://www.fesliyanstudios.com/play-mp3/387" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
+    <button id="playAudioBtn" onclick="toggleAudio()">Play Birthday Song 🎵</button>
+
+    <canvas class="fireworks"></canvas>
+
+    <script>
+        let song = document.getElementById("birthdaySong");
+        let playAudioBtn = document.getElementById("playAudioBtn");
+
+        function checkBirthday() {
+            let inputDate = new Date(document.getElementById("birthdayInput").value);
+            let name = document.getElementById("voterNameInput").value;
+            let messageElement = document.getElementById("message");
+            let wishMessageElement = document.getElementById("wishMessage");
+            let birthdayParagraph = document.getElementById("birthdayParagraph");
+            let cakeElement = document.getElementById("cake");
+            let fireworksCanvas = document.querySelector(".fireworks");
+
+            if (inputDate.getMonth() === 2 && inputDate.getDate() === 8) {
+                messageElement.textContent = "🎂 Happy Birthday, " + name + "! 🎂";
+                wishMessageElement.innerHTML = "🎉 Wishing you a joyful and wonderful year ahead! 🎉<br>" +
+                                               "✨ May your day be filled with love, laughter, and happiness. ✨<br>" +
+                                               "🎁 Hope all your dreams and wishes come true this year! 🎁";
+                birthdayParagraph.textContent = "Happy birthday, panda! May your heart be filled with laughter and happiness!";
+
+                birthdayParagraph.style.display = "block";
+                cakeElement.style.display = "block";
+                playAudioBtn.style.display = "inline-block";
+                fireworksCanvas.style.display = "block";
+
+                song.play().catch(error => console.log("Autoplay blocked! Click required:", error));
+                startFireworks();
+            } else {
+                messageElement.textContent = "❌ Not your birthday yet!";
+                wishMessageElement.textContent = "";
+                birthdayParagraph.style.display = "none";
+                cakeElement.style.display = "none";
+                playAudioBtn.style.display = "none";
+                fireworksCanvas.style.display = "none";
+                song.pause();
+            }
+        }
+
+        function startFireworks() {
+            const canvas = document.querySelector(".fireworks");
+            const ctx = canvas.getContext("2d");
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const fireworks = [];
+
+            function createFirework(x, y) {
+                let colors = ["red", "yellow", "blue", "green", "purple", "orange"];
+                return {
+                    x,
+                    y,
+                    size: Math.random() * 5 + 2,
+                    speedY: Math.random() * -5 - 5,
+                    color: colors[Math.floor(Math.random() * colors.length)]
+                };
+            }
+
+            function updateFireworks() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                fireworks.forEach((fw, index) => {
+                    fw.y += fw.speedY;
+                    fw.size *= 0.95;
+                    ctx.beginPath();
+                    ctx.arc(fw.x, fw.y, fw.size, 0, Math.PI * 2);
+                    ctx.fillStyle = fw.color;
+                    ctx.fill();
+                    if (fw.size < 0.5) fireworks.splice(index, 1);
+                });
+                requestAnimationFrame(updateFireworks);
+            }
+
+            setInterval(() => {
+                for (let i = 0; i < 5; i++) {
+                    fireworks.push(createFirework(Math.random() * canvas.width, canvas.height));
+                }
+            }, 500);
+
+            updateFireworks();
+        }
+    </script>
+
+</body>
+</html>
+
+
